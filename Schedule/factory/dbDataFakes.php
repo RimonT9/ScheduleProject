@@ -2,62 +2,62 @@
 
 $scheduleArr = [
     [
-        'courier' => 'Васьков Павел Радмирович',
-        'region' => 'Санкт-Петербург',
+        'courier_id' => '1',
+        'region_id' => '1',
         'exit' => '2000-12-01',
         'arrival' => '2000-12-5'
     ],
     [
-        'courier' => 'Рамазанов Андрей Вячеславович',
-        'region' => 'Уфа',
+        'courier_id' => '2',
+        'region_id' => '2',
         'exit' => '2000-12-03',
         'arrival' => '2000-12-8'
     ],
     [
-        'courier' => 'Громов Родион Русланович',
-        'region' => 'Воронеж',
+        'courier_id' => '3',
+        'region_id' => '3',
         'exit' => '2000-12-01',
         'arrival' => '2000-12-5'
     ],
     [
-        'courier' => 'Назаров Артем Дмитриевич',
-        'region' => 'Астрахань',
+        'courier_id' => '4',
+        'region_id' => '4',
         'exit' => '2000-12-07',
         'arrival' => '2000-12-23'
     ],
     [
-        'courier' => 'Ложков Виктор Ибрагомович',
-        'region' => 'Самара',
+        'courier_id' => '5',
+        'region_id' => '5',
         'exit' => '2001-01-02',
         'arrival' => '2001-01-5'
     ],
     [
-        'courier' => 'Новиков Егор Славович',
-        'region' => 'Кострома',
+        'courier_id' => '6',
+        'region_id' => '6',
         'exit' => '2001-02-07',
         'arrival' => '2001-02-14'
     ],
     [
-        'courier' => 'Щербаков Юрий Кириллович',
-        'region' => 'Ковров',
+        'courier_id' => '7',
+        'region_id' => '7',
         'exit' => '2000-12-20',
         'arrival' => '2000-12-25'
     ],
     [
-        'courier' => 'Лебедев Николай Олегович',
-        'region' => 'Владимир',
+        'courier_id' => '8',
+        'region_id' => '8',
         'exit' => '2001-02-11',
         'arrival' => '2000-12-18'
     ],
     [
-        'courier' => 'Глыбов Степан Алексеевич',
-        'region' => 'Екатеринбург',
+        'courier_id' => '9',
+        'region_id' => '9',
         'exit' => '2001-01-21',
         'arrival' => '2001-01-29'
     ],
     [
-        'courier' => 'Соловьев Евпатий Коловратов',
-        'region' => 'Нижний Новгород',
+        'courier_id' => '10',
+        'region_id' => '10',
         'exit' => '2001-02-19',
         'arrival' => '2001-02-22'
     ],
@@ -123,25 +123,13 @@ $couriers = [
 
 require "../lib/db.php";
 
-foreach($scheduleArr as $els)
-{
-    $obj = (object) $els;
-    $courier = $obj->courier; 
-    $region = $obj->region;
-    $exit = $obj->exit;
-    $arrival = $obj->arrival;
-
-    $sql = 'INSERT INTO travel_schedule(`courier`, `region`, `exit`, `arrival`) VALUES(?, ?, ?, ?)';
-    $query = $pdo->prepare($sql);
-    $query->execute([$courier, $region, $exit, $arrival]);
-}
 
 foreach($regions as $els)
 {
     $obj = (object) $els;
     $region = $obj->region;
     $duration_days = $obj->duration_days;
-
+    
     $sql = 'INSERT INTO regions(`region`, `duration_days`) VALUES(?, ?)';
     $query = $pdo->prepare($sql);
     $query->execute([$region, $duration_days]);
@@ -154,4 +142,16 @@ foreach($couriers as $courier)
     $query->execute([$courier]);
 }
 
+foreach($scheduleArr as $els)
+{
+    $obj = (object) $els;
+    $courier_id = $obj->courier_id; 
+    $region_id = $obj->region_id;
+    $exit = $obj->exit;
+    $arrival = $obj->arrival;
+
+    $sql = 'INSERT INTO travel_schedule(`courier_id`, `region_id`, `exit`, `arrival`) VALUES(?, ?, ?, ?)';
+    $query = $pdo->prepare($sql);
+    $query->execute([$courier_id, $region_id, $exit, $arrival]);
+}
 

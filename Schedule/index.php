@@ -16,6 +16,7 @@
         $('input[type="text"],textarea').val('');
         $('input[type="date"],textarea').val('');
         $("#information").html(data); 
+     
     }
 
     $(document).ready(function()

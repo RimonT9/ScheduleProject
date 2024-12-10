@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1
--- Время создания: Дек 08 2024 г., 22:15
--- Версия сервера: 10.4.32-MariaDB
--- Версия PHP: 8.2.12
+-- Хост: mysql-db
+-- Время создания: Дек 10 2024 г., 20:01
+-- Версия сервера: 8.0.39
+-- Версия PHP: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `couriers` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `courier` varchar(250) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` int UNSIGNED NOT NULL,
+  `courier` varchar(250) COLLATE utf8mb4_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `couriers`
@@ -55,10 +55,10 @@ INSERT INTO `couriers` (`id`, `courier`) VALUES
 --
 
 CREATE TABLE `regions` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `region` varchar(100) NOT NULL,
-  `duration_days` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id` int UNSIGNED NOT NULL,
+  `region` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `duration_days` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `regions`
@@ -83,28 +83,28 @@ INSERT INTO `regions` (`id`, `region`, `duration_days`) VALUES
 --
 
 CREATE TABLE `travel_schedule` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `courier` varchar(250) NOT NULL,
-  `region` varchar(100) NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `courier_id` int UNSIGNED NOT NULL,
+  `region_id` int UNSIGNED NOT NULL,
   `exit` date NOT NULL,
   `arrival` date NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Дамп данных таблицы `travel_schedule`
 --
 
-INSERT INTO `travel_schedule` (`id`, `courier`, `region`, `exit`, `arrival`) VALUES
-(1, 'Васьков Павел Радмирович', 'Санкт-Петербург', '2024-12-01', '2024-12-05'),
-(2, 'Рамазанов Андрей Вячеславович', 'Уфа', '2024-12-03', '2024-12-08'),
-(3, 'Громов Родион Русланович', 'Воронеж', '2024-12-01', '2024-12-05'),
-(4, 'Назаров Артем Дмитриевич', 'Астрахань', '2024-12-07', '2024-12-23'),
-(5, 'Ложков Виктор Ибрагомович', 'Самара', '2025-01-02', '2025-01-05'),
-(6, 'Новиков Егор Славович', 'Кострома', '2025-02-07', '2025-02-14'),
-(7, 'Щербаков Юрий Кириллович', 'Ковров', '2024-12-20', '2024-12-25'),
-(8, 'Лебедев Николай Олегович', 'Владимир', '2025-02-11', '2024-12-18'),
-(9, 'Глыбов Степан Алексеевич', 'Екатеринбург', '2025-01-21', '2025-01-29'),
-(10, 'Соловьев Евпатий Коловратов', 'Нижний Новгород', '2025-02-19', '2025-02-22');
+INSERT INTO `travel_schedule` (`id`, `courier_id`, `region_id`, `exit`, `arrival`) VALUES
+(1, 1, 1, '2000-12-01', '2000-12-05'),
+(2, 2, 2, '2000-12-03', '2000-12-08'),
+(3, 3, 3, '2000-12-01', '2000-12-05'),
+(4, 4, 4, '2000-12-07', '2000-12-23'),
+(5, 5, 5, '2001-01-02', '2001-01-05'),
+(6, 6, 6, '2001-02-07', '2001-02-14'),
+(7, 7, 7, '2000-12-20', '2000-12-25'),
+(8, 8, 8, '2001-02-11', '2000-12-18'),
+(9, 9, 9, '2001-01-21', '2001-01-29'),
+(10, 10, 10, '2001-02-19', '2001-02-22');
 
 --
 -- Индексы сохранённых таблиц
@@ -127,7 +127,9 @@ ALTER TABLE `regions`
 -- Индексы таблицы `travel_schedule`
 --
 ALTER TABLE `travel_schedule`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `courier_idx` (`courier_id`),
+  ADD KEY `region_idx` (`region_id`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -137,19 +139,30 @@ ALTER TABLE `travel_schedule`
 -- AUTO_INCREMENT для таблицы `couriers`
 --
 ALTER TABLE `couriers`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `regions`
 --
 ALTER TABLE `regions`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `travel_schedule`
 --
 ALTER TABLE `travel_schedule`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `travel_schedule`
+--
+ALTER TABLE `travel_schedule`
+  ADD CONSTRAINT `travel_schedule_ibfk_1` FOREIGN KEY (`courier_id`) REFERENCES `couriers` (`id`),
+  ADD CONSTRAINT `travel_schedule_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
